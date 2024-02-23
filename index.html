@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>parse UTC date time strings to local (all local)</title>
+    <style>
+        body {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        main {
+            padding-left: 20px;
+        }
+
+        .container {
+            padding-top: 100px;
+        }
+
+        label {
+            font-size: 1.5rem;
+        }
+
+        input {
+            width: 20vw;
+            min-width: 150px;
+        }
+
+        h1 {
+            margin-bottom: 4px;
+        }
+
+        h3 {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .subsection {
+            margin-left: 10px;
+        }
+
+        footer {
+            padding-top: 100px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>parse date time strings (such as ISO 8601) to local time</h1>
+
+    <main>
+        <p>We do not record anything. All logic is done on the client side.</p>
+
+        <div class="container">
+            <label for="input">Input your date time</label><br />
+            <input type="text" id="input" class="subsection" name="input" oninput="parseInput()" />
+
+            <p>
+            <h3>UTC</h3>
+            <div id="utc" class="subsection">N/A</div>
+            </p>
+
+            <p>
+            <h3>Local</h3>
+            <div id="local" class="subsection">N/A</div>
+            </p>
+        </div>
+    </main>
+
+
+    <footer>
+        <a href="https://rexfeng.com">xta</a> 2024 <a href="https://github.com/xta/js-parse-date-time-string">view on
+            github</a>
+    </footer>
+    </div>
+</body>
+
+<script>
+    function parseInput() {
+        var input = document.getElementById('input').value;
+        var date = new Date(Date.parse(input));
+
+        // set UTC string
+
+        var utcEl = document.getElementById('utc');
+        utcEl.innerText = date.toUTCString();
+
+        // set local string
+
+        var outputEl = document.getElementById('local');
+        var outputWeekday = date.toLocaleString('en-us', { weekday: 'short' })
+
+        var formatter = Intl.DateTimeFormat(undefined, { timeZoneName: 'long' });
+        var timezone = formatter.formatToParts(date).find((part) => part.type == 'timeZoneName').value;
+
+        var output = `${outputWeekday}, ${date.toLocaleString()} ${timezone}`
+        outputEl.innerText = output;
+    }
+
+    function setupInput() {
+        var inputEl = document.getElementById('input');
+        var now = new Date()
+        inputEl.value = now.toISOString()
+    }
+
+    setupInput()
+    parseInput()
+</script>
+
+</html>
